@@ -8,3 +8,6 @@ This repository is for:
 - practicing cybersecurity concepts
 - understanding how common attacks work
 - building simple tools from scratch
+
+## Note
+Some commands need root privileges: check dir readme

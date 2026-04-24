@@ -1,6 +1,7 @@
 from scapy.all import sniff
+import sys
 
-debug = True
+debug = len(sys.argv) > 1 and sys.argv[1] == "-debug"
 
 # maps IP to MAC
 ARP_TABLE = {}
@@ -11,7 +12,7 @@ def processPacket(packet):
     src_mac = packet['Ether'].src
 
     if (debug):
-        print(f"src_ip = {src_ip}, src_mac = {src_mac}")
+        print(f"received: src_ip = {src_ip}, src_mac = {src_mac}")
 
     # check if we have this IP mapped
     if src_ip in ARP_TABLE.keys():
@@ -28,6 +29,8 @@ def processPacket(packet):
     else:
         # we haven't seen this ip, lets add it to the table
         ARP_TABLE[src_ip] = src_mac
+        if debug:
+            print(f"added to the table: src_ip = {src_ip}, src_mac = {src_mac}")
 
 # lets sniff some packets, filtering for arp requests and run our program
 sniff(count = 0, filter = "arp", store = 0, prn = processPacket)
